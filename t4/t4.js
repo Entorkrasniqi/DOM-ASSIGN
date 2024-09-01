@@ -773,3 +773,40 @@ const restaurants = [
 // your code here
 
 
+let myLocation = [];
+
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(handlePosition);
+} else {
+  console.log('Geolocation is not supported in this browser');
+}
+
+function handlePosition(position) {
+  myLocation = [position.coords.longitude, position.coords.latitude];
+  sortByDistance(restaurants, myLocation);
+
+  const table = document.querySelector('table');
+
+  restaurants.forEach(restaurant => {
+    const row = table.insertRow();
+    const nameCell = row.insertCell();
+    const addressCell = row.insertCell();
+    nameCell.textContent = restaurant.name;
+    addressCell.textContent = restaurant.address;
+  });
+}
+
+function sortByDistance(array, myLocation) {
+  array.sort(
+    (a, b) =>
+      calculateDistance(myLocation, a.location.coordinates) -
+      calculateDistance(myLocation, b.location.coordinates)
+  );
+}
+
+function calculateDistance(coordinates1, coordinates2) {
+  return Math.sqrt(
+    Math.pow(coordinates2[0] - coordinates1[0], 2) +
+      Math.pow(coordinates2[1] - coordinates1[1], 2)
+  );
+}

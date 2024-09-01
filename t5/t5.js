@@ -771,3 +771,23 @@ const restaurants = [
 ];
 
 // your code here
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Initialize the map
+  const map = L.map('map').setView([60.192059, 24.945831], 11); // Centered around Helsinki
+
+  // Add the OpenStreetMap tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+  }).addTo(map);
+
+  restaurants.forEach(function (restaurant) {
+    var marker = L.marker([
+      restaurant.location.coordinates[1],
+      restaurant.location.coordinates[0],
+    ]).addTo(map);
+    marker.bindPopup(
+      `<b>${restaurant.name}</b><br>${restaurant.address}<br>Puh: ${restaurant.phone}<br>Yritys: ${restaurant.company}`
+    );
+  });
+});
